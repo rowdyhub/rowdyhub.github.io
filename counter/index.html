@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Counter</title>
+    <style>
+        :root {
+            --main-color: #292929;
+            --main-color-hover-stable: #2d2d2d;
+            --main-color-hover: #2d2d2d;
+            --white: #ffffff;
+            --white-stable: #ffffff;
+            --grey100: #F5F5F7;
+            --grey400: #A7A8AB;
+            --border-color: #00000020;
+            --transtion-duration: 200ms;
+        }
+        [dark] {
+            --main-color: #d7d7d7;
+            --main-color-hover: #d4d4d4;
+            --white: #282828;
+            --grey100: #1c1c1c;
+            --grey400: #000000;
+            --border-color: #ffffff20;
+        }
+        body, html {
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            position: relative;
+        }
+        #header {
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 10px;
+            border-bottom: 1px solid var(--border-color);
+            background-color: var(--grey400);
+            z-index: 9999;
+            -webkit-transition: background-color var(--transtion-duration) linear;
+            -ms-transition: background-color var(--transtion-duration) linear;
+            transition: background-color var(--transtion-duration) linear;
+        }
+        #body_counter {
+            height: 100vh;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            user-select: none;
+            background-color: var(--white);
+            -webkit-transition: background-color var(--transtion-duration) linear;
+            -ms-transition: background-color var(--transtion-duration) linear;
+            transition: background-color var(--transtion-duration) linear;
+        }
+        #counter {
+            position: relative;
+            color: var(--main-color);
+            font-size: 5rem;
+            -webkit-transition: color var(--transtion-duration) linear;
+            -ms-transition: color var(--transtion-duration) linear;
+            transition: color var(--transtion-duration) linear;
+        }
+        span {
+            display: flex;
+            align-items: center;
+        }
+
+        /* --------------------------------------------------------- */
+
+
+        .checkboxLabel {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            outline: none;
+        }
+        .checkboxSwitch {
+            content: '';
+            margin: 0 7px 0 0;
+            display: inline-block;
+            position: relative;
+            width: 40px;
+            height: 21px;
+            background-color: var(--grey100);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+        }
+        input[type='checkbox']:checked~.checkboxSwitch{
+            background-color: var(--main-color-hover-stable);
+            content: '';
+            transition: .3s;
+        }
+        .checkboxSwitch:before {
+            content: '☀';
+            display: inline-block;
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background-color: var(--main-color-hover-stable);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            top: 2px;
+            left: 2px;
+            color: #ffffff;
+            font-size: 9pt;
+            line-height: 12pt;
+            text-align: center;
+            transition: .3s;
+        }
+        input[type='checkbox']:checked~.checkboxSwitch:before{
+            content: '☾';
+            color: #000000;
+            font-size: 9pt;
+            font-weight: 900;
+            line-height: 12pt;
+            text-align: center;
+            transition: .3s;
+            left: calc( 100% - 2px - 15px - 2px ); /* 2px:отступ, 15px:ширина элемента, 1px:border */
+            background-color: var(--white-stable);
+        }
+        input[type='checkbox'] {
+            display: none;
+        }
+
+        /* --------------------------------------------------------- */
+    </style>
+</head>
+<body>
+    <div id="header">
+        <span> 
+            <div>
+                <label class="checkboxLabel" for="checkbox">
+                    <input type="checkbox" name="#" id="checkbox">
+                    <div class="checkboxSwitch"></div>
+                </label>
+            </div>
+        </span>
+    </div>
+    <div id="body_counter">
+        <div id="counter"></div>
+    </div>
+</body>
+<script>
+    const NIGHT_MODE_SWITCH = document.getElementById('checkbox');
+    NIGHT_MODE_SWITCH.onchange = () => {
+        changeTheme(NIGHT_MODE_SWITCH.checked);
+    }
+
+    function changeTheme(isChecked) {
+        if (isChecked) {
+            document.body.setAttribute('dark', '');
+        } else {
+            document.body.removeAttribute('dark');
+        }
+    }
+    function render() {
+        document.getElementById('counter').innerText = counter.value;
+    }
+
+    let counter = {
+        value: 0,
+        increment: () => {
+            counter.value++;
+            render();
+        }
+    }
+
+    document.getElementById('body_counter').onclick = (e) => {
+        console.log(e.target);
+        counter.increment();
+    }
+
+    render();
+
+</script>
+</html>
